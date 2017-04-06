@@ -9,7 +9,7 @@ public class Main {
 
         try {
 
-            ArrayList<Point> points = u.inputData(fileName);
+            Vector<Point> points = u.inputData(fileName);
 
             System.out.println(points.size());
 

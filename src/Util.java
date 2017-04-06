@@ -7,9 +7,9 @@ public class Util {
 
     }
 
-    public ArrayList<Point> inputData(String fileName) {
+    public Vector<Point> inputData(String fileName) {
 
-        ArrayList<Point> points = new ArrayList<Point>();
+        Vector<Point> points = new Vector<Point>();
 
         try {
 
@@ -34,7 +34,23 @@ public class Util {
 
     }
 
-    public double getDistance(Point a, Point b) {
+//    public static Vector<Point> getNeighbours(Point p, Vector<Point> points) {
+//
+//        Vector<Point> result = new Vector<Point>();
+//        Iterator<Point> list = points.iterator();
+//
+//        while (list.hasNext()) {
+//            Point a = points.next();
+//            if (getDistance(p, a) <= ) {
+//
+//            }
+//        }
+//
+//        return result;
+//    }
+
+
+    public static double getDistance(Point a, Point b) {
         double distance = Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY(), 2));
         return distance;
     }
