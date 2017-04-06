@@ -1,5 +1,3 @@
-package test;
-
 public class Point {
 
 	private int id;
@@ -7,7 +5,8 @@ public class Point {
 	private double y;
 	private boolean core = false; // whether it is a core
 	
-	public Point(double x, double y) {
+	public Point(int id, double x, double y) {
+		this.id = id;
 		this.x = x;
 		this.y = y;
 	}
