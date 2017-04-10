@@ -3,8 +3,8 @@ public class Point {
 	private int id;
 	private double x;
 	private double y;
-	private boolean core = false; // whether it is a core
-	
+	private boolean core = false; // 标记是否为核心点
+
 	public Point(int id, double x, double y) {
 		this.id = id;
 		this.x = x;
@@ -15,10 +15,6 @@ public class Point {
 		return this.id;
 	}
 	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
 	public double getX () {
 		return this.x;
 	}
@@ -27,14 +23,10 @@ public class Point {
 		return this.y;
 	}
 	
-	public void setX (double x) {
-		this.x = x;
+	public void setCore (Boolean core) {
+		this.core = core;
 	}
-	
-	public void setY (double y) {
-		this.y = y;
-	}
-	
+
 	public Boolean getCore () {
 		return this.core;
 	}
