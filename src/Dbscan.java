@@ -8,7 +8,8 @@ public class Dbscan {
 
     public Hashtable<Integer, Vector<Point>> run(double R, int Pts, Vector<Point> points) { // 主函数
         System.out.println("run has reached");
-        Hashtable<String, Double> distanceList = distanceList(points);
+//        Hashtable<String, Double> distanceList = distanceList(points);
+        Hashtable<String, Double> distanceList = new Hashtable<>();
         Hashtable<String, Vector<Point>> coresAndNotCores = getCores(R, Pts, points, distanceList);
         Vector<Point> cores = coresAndNotCores.get("core");
         Hashtable<Integer, Vector<Point>> clusterTable;
@@ -69,9 +70,12 @@ public class Dbscan {
 
         System.out.println("distanceList has reached");
 
+        int i = 0;
         for (Iterator it1 = points.iterator(); it1.hasNext(); ) {
             Point point1 = (Point) it1.next();
 
+            i++;
+            System.out.println(i);
             for (Iterator it2 = points.iterator(); it2.hasNext(); ) {
                 Point point2 = (Point) it2.next();
                 distanceList.put(point1.getId() + "-" + point2.getId(), getDistance(point1, point2));
@@ -96,7 +100,11 @@ public class Dbscan {
 
             for (Iterator iterator1 = points.iterator(); iterator1.hasNext(); ) {
                 Point point2 = (Point) iterator1.next();
-                if (distanceList.get(point1.getId() + "-" + point2.getId()) <= R) {
+//                if (distanceList.get(point1.getId() + "-" + point2.getId()) <= R) {
+//                    count++;
+//                }
+
+                if (getDistance(point1, point2) <= R) {
                     count++;
                 }
             }
@@ -160,7 +168,13 @@ public class Dbscan {
                 for (int k = 0; k < cpCores.size(); k++) {
                     Point point2 = cpCores.get(k);
 
-                    if (distanceList.get(point1.getId() + "-" + point2.getId()) <= R && coreCluster.indexOf(point2) == -1) {
+//                    if (distanceList.get(point1.getId() + "-" + point2.getId()) <= R && coreCluster.indexOf(point2) == -1) {
+//                        coreCluster.add(point2);
+//                        cpCores.remove(point2);
+//                        k--;
+//                    }
+
+                    if (getDistance(point1, point2) <= R && coreCluster.indexOf(point2) == -1) {
                         coreCluster.add(point2);
                         cpCores.remove(point2);
                         k--;
@@ -174,7 +188,14 @@ public class Dbscan {
                 for (int l = 0; l < notCores.size(); l++) {
                     Point point3 = notCores.get(l);
 
-                    if (distanceList.get(point1.getId() + "-" + point3.getId()) <= R && coreCluster.indexOf(point3) == -1) {
+//                    if (distanceList.get(point1.getId() + "-" + point3.getId()) <= R && coreCluster.indexOf(point3) == -1) {
+//                        coreCluster.add(point3);
+//                        borders.add(point3);
+//                        notCores.remove(point3);
+//                        l--;
+//                    }
+
+                    if (getDistance(point1, point3) <= R && coreCluster.indexOf(point3) == -1) {
                         coreCluster.add(point3);
                         borders.add(point3);
                         notCores.remove(point3);

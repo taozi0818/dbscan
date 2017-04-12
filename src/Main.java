@@ -4,6 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        long startTime = System.currentTimeMillis();
         Util u = new Util();
         Dbscan dbscan = new Dbscan();
         String fileName = "//Users//tyt//Desktop//data.txt";
@@ -28,6 +29,9 @@ public class Main {
             e.printStackTrace();
 
         }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("运行时间: " + (endTime - startTime) + "ms");
 
     }
 
