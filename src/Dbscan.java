@@ -1,3 +1,4 @@
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Dbscan {
@@ -8,86 +9,71 @@ public class Dbscan {
 
     public Hashtable<Integer, Vector<Point>> run(double R, int Pts, Vector<Point> points) { // 主函数
         System.out.println("run has reached");
-//        Hashtable<String, Double> distanceList = distanceList(points);
-        Hashtable<String, Double> distanceList = new Hashtable<>();
-        Hashtable<String, Vector<Point>> coresAndNotCores = getCores(R, Pts, points, distanceList);
+        Hashtable<String, Vector<Point>> coresAndNotCores = getCores(R, Pts, points);
         Vector<Point> cores = coresAndNotCores.get("core");
         Hashtable<Integer, Vector<Point>> clusterTable;
-        clusterTable = extend(R, coresAndNotCores, distanceList);
-
-
-        /*
-        输出距离表,便于观察,后期可以删除
-         */
-//        System.out.println("*******distanceList*******");
-//        for (int i = 1; i <= points.size(); i++) {
-//            for (int j = 1; j <= points.size(); j++) {
-//                String key = i + "-" + j;
-//                System.out.println(key + ": " + distanceList.get(key));
-//            }
-//        }
-//        System.out.println("*******distanceList*******");
+        clusterTable = extend(R, coresAndNotCores);
+        String pointFileName = "//Users//tyt//Desktop//point.txt"; // 点分类文件输出路径
         System.out.println();
-        /*
-        输出核心点,便于调试观察,后期可以删除
-         */
-        System.out.println("*******cores*******");
-        for (Iterator iterator = cores.iterator(); iterator.hasNext(); ) {
-            Point core = (Point) iterator.next();
-            System.out.println(core.getId());
+
+        try {
+            PrintWriter pointFile = new PrintWriter(pointFileName);
+
+            /*
+            输出核心点,便于调试观察,后期可以删除
+            */
+            System.out.println("*******cores*******");
+            pointFile.println("*******cores*******");
+            for (Iterator iterator = cores.iterator(); iterator.hasNext(); ) {
+                Point core = (Point) iterator.next();
+                System.out.println(core.getId());
+                pointFile.println("X:" + core.getX() + " Y:" + core.getY() + " id:" + core.getId());
+            }
+            System.out.println("*******cores*******");
+            pointFile.println("*******cores*******");
+            pointFile.println("-------------------------------------------");
+            System.out.println();
+
+            /*
+            输出边界点,便于观察调试,后期可以删除
+            */
+            System.out.println("*******borders*******");
+            pointFile.println("*******borders*******");
+            for (Iterator iterator = coresAndNotCores.get("borders").iterator(); iterator.hasNext(); ) {
+                Point border = (Point) iterator.next();
+                System.out.println(border.getId());
+                pointFile.println("X:" + border.getX() + " Y:" + border.getY() + " id:" + border.getId());
+            }
+            System.out.println("*******borders*******");
+            pointFile.println("*******borders*******");
+            pointFile.println("-------------------------------------------");
+            System.out.println();
+
+            /*
+            输出噪声点,便于调试观察,后期可以删除
+             */
+            System.out.println("*******noises*******");
+            pointFile.println("*******noises*******");
+            for (Iterator iterator = coresAndNotCores.get("noise").iterator(); iterator.hasNext(); ) {
+                Point noise = (Point) iterator.next();
+                System.out.println(noise.getId());
+                pointFile.println("X:" + noise.getX() + " Y:" + noise.getY() + " id:" + noise.getId());
+            }
+            System.out.println("*******noises*******");
+            pointFile.println("*******noises*******");
+
+            pointFile.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        System.out.println("*******cores*******");
-        System.out.println();
 
-        /*
-        输出边界点,便于观察调试,后期可以删除
-         */
-        System.out.println("*******borders*******");
-        for (Iterator iterator = coresAndNotCores.get("borders").iterator(); iterator.hasNext(); ) {
-            Point core = (Point) iterator.next();
-            System.out.println(core.getId());
-        }
-        System.out.println("*******borders*******");
         System.out.println();
-
-        /*
-        输出噪声点,便于调试观察,后期可以删除
-         */
-        System.out.println("*******noise*******");
-        for (Iterator iterator = coresAndNotCores.get("noise").iterator(); iterator.hasNext(); ) {
-            Point noise = (Point) iterator.next();
-            System.out.println(noise.getId());
-        }
-        System.out.println("*******noise*******");
-        System.out.println();
-
         System.out.println("run has ended");
         return clusterTable;
     }
 
-    public Hashtable<String, Double> distanceList(Vector<Point> points) { // 点与点之间的距离
-        Hashtable<String, Double> distanceList = new Hashtable<>();
 
-        System.out.println("distanceList has reached");
-
-        int i = 0;
-        for (Iterator it1 = points.iterator(); it1.hasNext(); ) {
-            Point point1 = (Point) it1.next();
-
-            i++;
-            System.out.println(i);
-            for (Iterator it2 = points.iterator(); it2.hasNext(); ) {
-                Point point2 = (Point) it2.next();
-                distanceList.put(point1.getId() + "-" + point2.getId(), getDistance(point1, point2));
-            }
-        }
-
-        System.out.println("distanceList has ended");
-
-        return distanceList;
-    }
-
-    public Hashtable<String, Vector<Point>> getCores(double R, int minPts, Vector<Point> points, Hashtable<String, Double> distanceList) { // 核心点
+    public Hashtable<String, Vector<Point>> getCores(double R, int minPts, Vector<Point> points) { // 核心点
         Hashtable<String, Vector<Point>> result = new Hashtable<>();
         Vector<Point> core = new Vector<>(); // 核心点集合
         Vector<Point> notCore = new Vector<>(); // 非核心点集合
@@ -100,9 +86,6 @@ public class Dbscan {
 
             for (Iterator iterator1 = points.iterator(); iterator1.hasNext(); ) {
                 Point point2 = (Point) iterator1.next();
-//                if (distanceList.get(point1.getId() + "-" + point2.getId()) <= R) {
-//                    count++;
-//                }
 
                 if (getDistance(point1, point2) <= R) {
                     count++;
@@ -125,26 +108,7 @@ public class Dbscan {
         return result;
     }
 
-//    // 获取边界点集合
-//    public Vector<Point> getBorders(double R, Vector<Point> core, Vector<Point> notCore) {
-//        Vector<Point> border = new Vector<>();
-//
-//        for (Iterator iterator = notCore.iterator(); iterator.hasNext(); ) {
-//            Point point1 = (Point) iterator.next();
-//
-//            for (Iterator iterator1 = core.iterator(); iterator1.hasNext(); ) {
-//                Point point2 = (Point) iterator.next();
-//                if (getDistance(point1, point2) <= R) {
-//                    border.add(point1);
-//                    break;
-//                }
-//            }
-//        }
-//
-//        return border;
-//    }
-
-    public Hashtable<Integer, Vector<Point>> extend(double R, Hashtable<String, Vector<Point>> coreAndNotCores, Hashtable<String, Double> distanceList) {
+    public Hashtable<Integer, Vector<Point>> extend(double R, Hashtable<String, Vector<Point>> coreAndNotCores) {
         Hashtable<Integer, Vector<Point>> cluster = new Hashtable<>();
         Vector<Point> cpCores = (Vector) coreAndNotCores.get("core").clone();
         Vector<Point> notCores = coreAndNotCores.get("notCore");
@@ -168,12 +132,6 @@ public class Dbscan {
                 for (int k = 0; k < cpCores.size(); k++) {
                     Point point2 = cpCores.get(k);
 
-//                    if (distanceList.get(point1.getId() + "-" + point2.getId()) <= R && coreCluster.indexOf(point2) == -1) {
-//                        coreCluster.add(point2);
-//                        cpCores.remove(point2);
-//                        k--;
-//                    }
-
                     if (getDistance(point1, point2) <= R && coreCluster.indexOf(point2) == -1) {
                         coreCluster.add(point2);
                         cpCores.remove(point2);
@@ -187,13 +145,6 @@ public class Dbscan {
                 */
                 for (int l = 0; l < notCores.size(); l++) {
                     Point point3 = notCores.get(l);
-
-//                    if (distanceList.get(point1.getId() + "-" + point3.getId()) <= R && coreCluster.indexOf(point3) == -1) {
-//                        coreCluster.add(point3);
-//                        borders.add(point3);
-//                        notCores.remove(point3);
-//                        l--;
-//                    }
 
                     if (getDistance(point1, point3) <= R && coreCluster.indexOf(point3) == -1) {
                         coreCluster.add(point3);
