@@ -13,7 +13,7 @@ public class Dbscan {
         Vector<Point> cores = coresAndNotCores.get("core");
         Hashtable<Integer, Vector<Point>> clusterTable;
         clusterTable = extend(R, coresAndNotCores);
-        String pointFileName = "//Users//tyt//Desktop//point.txt"; // 点分类文件输出路径
+        String pointFileName = "C:\\Users\\hp-pc\\Desktop\\point.txt"; // 点分类文件输出路径
         System.out.println();
 
         try {
@@ -128,6 +128,10 @@ public class Dbscan {
 
             for (int j = 0; j < coreCluster.size(); j++) {
                 Point point1 = coreCluster.get(j);
+
+                if (!point1.getCore()) {
+                    continue;
+                }
 
                 for (int k = 0; k < cpCores.size(); k++) {
                     Point point2 = cpCores.get(k);

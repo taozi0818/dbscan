@@ -8,10 +8,10 @@ public class Main {
         long startTime = System.currentTimeMillis();
         Util u = new Util();
         Dbscan dbscan = new Dbscan();
-        String fileName = "//Users//tyt//Desktop//data.txt"; // 源数据文件路径
-        String outFile = "//Users//tyt//Desktop//result.txt"; // 聚类输出文件路径
+        String fileName = "C:\\Users\\hp-pc\\Desktop\\data.txt"; // 源数据文件路径
+        String outFile = "C:\\Users\\hp-pc\\Desktop\\DBSCAN.txt"; // 聚类输出文件路径
         Double R = 2.50;
-        int minPts = 5;
+        int minPts = 4;
         int i = 0;
 
         try {
@@ -29,7 +29,7 @@ public class Main {
                 for (Iterator iterator1 = test.iterator(); iterator1.hasNext(); ) {
                     Point point = (Point) iterator1.next();
                     System.out.println("X:" + point.getX() + " Y:" + point.getY() + " id:" + point.getId());
-                    result.println("X:" + point.getX() + " Y:" + point.getY());
+                    result.println("X:" + point.getX() + " Y:" + point.getY() + " id: " + point.getId());
                 }
             }
 
